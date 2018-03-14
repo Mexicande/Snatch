@@ -1,0 +1,155 @@
+package com.deerlive.zhuawawa.activity;
+
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.deerlive.zhuawawa.R;
+import com.deerlive.zhuawawa.adapter.RecordZqRecyclerListAdapter;
+import com.deerlive.zhuawawa.base.BaseActivity;
+import com.deerlive.zhuawawa.common.Api;
+import com.deerlive.zhuawawa.intf.OnRecyclerViewItemClickListener;
+import com.deerlive.zhuawawa.intf.OnRequestDataListener;
+import com.deerlive.zhuawawa.model.DanmuMessage;
+import com.deerlive.zhuawawa.utils.ActivityUtils;
+import com.deerlive.zhuawawa.utils.SPUtils;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import butterknife.Bind;
+
+public class RecordZhuaListActivity extends BaseActivity implements OnRecyclerViewItemClickListener {
+
+
+    @Bind(R.id.refreshLayout)
+    SmartRefreshLayout mRefreshLayout;
+    @Bind(R.id.recyclerview)
+    RecyclerView mRecyclerView;
+    @Bind(R.id.tv_title)
+    TextView tvTitle;
+    @Bind(R.id.iv_default)
+    ImageView ivDefault;
+    private String mToken;
+    private ArrayList<DanmuMessage> mListData = new ArrayList();
+    private RecordZqRecyclerListAdapter mAdapter = new RecordZqRecyclerListAdapter( mListData);
+    private View notDataView;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        tvTitle.setText(getResources().getString(R.string.zhuaqu_record));
+        mToken = SPUtils.getInstance().getString("token");
+        mRefreshLayout.autoRefresh();
+        initGameList();
+    }
+
+    private void initGameList() {
+        final LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
+        //mRecyclerView.addItemDecoration(new SpaceItemDecoration(SizeUtils.dp2px(10)));
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(mAdapter);
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                getGameData(0);
+            }
+        });
+        mRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+                getGameData(mListData.size());
+            }
+        });
+        notDataView = getLayoutInflater().inflate(R.layout.empty_view, (ViewGroup) mRecyclerView.getParent(), false);
+
+    }
+
+    private void getGameData(final int limit_begin) {
+        Map<String,String> params=new HashMap<>();
+        params.put("token", mToken);
+        params.put("limit_begin", String.valueOf(limit_begin));
+        params.put("limit_num", 10+"");
+        Api.getZhuaRecord(this, params, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                if (limit_begin == 0) {
+                    mListData.clear();
+                }
+                if (mRefreshLayout.isRefreshing()) {
+                    mRefreshLayout.finishRefresh();
+                }
+                if (mRefreshLayout.isLoading()) {
+                    mRefreshLayout.finishLoadmore();
+                }
+                JSONArray list = data.getJSONArray("info");
+                for (int i = 0; i < list.size(); i++) {
+                    DanmuMessage g = new DanmuMessage();
+                    JSONObject t = list.getJSONObject(i);
+                    g.setUserName(t.getString("name"));
+                    g.setAvator(t.getString("img"));
+                    g.setUid(t.getString("play_time"));
+                    g.setMessageContent(t.getString("play_result"));
+                    g.setId(t.getString("smeta"));
+                    g.setRemoteUid(t.getString("video_status"));
+                    mListData.add(g);
+                }
+                mAdapter.setNewData(mListData);
+
+                if(mListData.size()!=0){
+                    ivDefault.setVisibility(View.GONE);
+                }
+
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                toast(msg);
+                if(mListData.size()==0){
+                    mAdapter.setEmptyView(notDataView);
+                }
+                if (mRefreshLayout.isRefreshing()) {
+                    mRefreshLayout.finishRefresh();
+                }
+                if (mRefreshLayout.isLoading()) {
+                    mRefreshLayout.finishLoadmore();
+                }
+            }
+        });
+    }
+
+    @Override
+    public int getLayoutResource() {
+        return R.layout.activity_record_zhua_list;
+    }
+
+    @Override
+    public void onRecyclerViewItemClick(View view, int position) {
+        DanmuMessage t = mListData.get(position);
+        if (t != null && "1".equals(t.getRemoteUid())) {
+            Bundle d = new Bundle();
+            d.putSerializable("item", t);
+            ActivityUtils.startActivity(d, VideoPlayerActivity.class);
+        } else {
+            toast(getString(R.string.record_error));
+        }
+    }
+
+
+    public void goBack(View v) {
+        finish();
+    }
+}

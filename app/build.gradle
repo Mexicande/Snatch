@@ -1,0 +1,133 @@
+apply plugin: 'com.android.application'
+apply plugin: 'bugly'
+apply plugin: 'walle'
+
+bugly {
+    appId = '8063782a38'
+    appKey = '56838b92-88eb-453a-aa74-06eabba3c8b8'
+}
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
+
+    defaultConfig {
+        applicationId "com.deerlive.zhuawawa"
+        minSdkVersion 16
+        targetSdkVersion 21
+        versionCode 7
+        versionName "1.3.3"
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a","x86"
+        }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath = true
+            }
+        }
+    }
+    signingConfigs {
+        debug {
+
+        }
+        release {
+            v1SigningEnabled true
+            v2SigningEnabled true
+            storeFile file('../keystore/sisi.jks')
+            keyAlias 'sisi'
+            keyPassword 'dfsbLPL6wjG4t68kjd'
+            storePassword 'dfsbLPL6wjG4t68kjd'
+        }
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+    buildTypes {
+        debug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            //混淆
+            minifyEnabled false
+            //Zipalign优化
+            zipAlignEnabled false
+            // 移除无用的resource文件
+            shrinkResources false
+            //加载默认混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //签名
+            signingConfig signingConfigs.release
+        }
+        release {
+
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            //混淆
+            minifyEnabled true
+            //Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources false
+            //加载默认混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //签名
+            signingConfig signingConfigs.release
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    walle {
+        // 指定渠道包的输出路径
+        apkOutputFolder = new File("${project.buildDir}/outputs/channels");
+        // 定制渠道包的APK的文件名称
+        apkFileNameFormat = '${channel}-v${versionName}-${buildTime}.apk';
+        // 渠道配置文件
+        channelFile = new File("${project.getProjectDir()}/channel")
+    }
+}
+
+dependencies {
+    implementation 'com.android.support:support-v4:25.4.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile('com.afollestad.material-dialogs:core:0.9.5.0') {
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
+    compile 'com.android.support:multidex:1.0.1'
+    compile(name: 'LiteAVSDK_Player', ext: 'aar')
+    compile files('libs/alipaySdk-20160516.jar')
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.hss01248:DialogUtil:1.1.4'
+    compile 'com.alibaba:fastjson:1.2.39'
+    compile 'com.github.hackware1993:MagicIndicator:1.5.0'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.12'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.contrarywind:Android-PickerView:3.2.7'
+
+    compile 'com.meituan.android.walle:library:1.1.5'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.android.support:cardview-v7:25.3.1'
+    compile 'com.tencent.bugly:crashreport:latest.release'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
+    compile 'com.github.mancj:SlideUp-Android:2.2.5'
+    compile 'cn.bingoogolapple:bga-banner:2.1.6@aar'
+
+    compile 'com.lzy.net:okgo:3.0.4'
+    compile 'com.lzy.net:okrx2:2.0.2'
+    compile 'com.lzy.net:okserver:2.0.5'
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3'
+}

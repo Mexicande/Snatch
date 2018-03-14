@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <include layout="@layout/charge_top"/>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:background="@color/bg_color"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"/>
+            <ImageView
+                android:id="@+id/iv_default"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/errer_default"
+                />
+
+        </RelativeLayout>
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:id="@+id/duihuan"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:background="@drawable/prize_button"
+            android:text="@string/tv_exchange"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:onClick="duihuan"/>
+        <TextView
+            android:id="@+id/tiqu"
+            android:layout_marginLeft="50dp"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_extract"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:background="@drawable/prize_button"
+            android:onClick="tiqu"/>
+       <!-- <com.deerlive.zhuawawa.view.supertextview.SuperButton
+            android:layout_width="100dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_height="30dp"
+            app:sCornersRadius="10dp"
+            android:text="@string/tv_exchange"
+            app:sSolidColor="@color/colorPrimaryDark"
+            android:textColor="@color/white"
+            android:onClick="duihuan"
+
+            />-->
+    </LinearLayout>
+</LinearLayout>

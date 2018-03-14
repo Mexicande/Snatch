@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_danmu_container"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_marginTop="10dp"
+    android:background="@color/white"
+    app:cardElevation="0.8dp"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <CheckBox
+            android:id="@+id/checkbox_select"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_margin="10dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/check_exchange_way"
+            android:button="@null"/>
+        <ImageView
+            android:layout_marginLeft="5dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:id="@+id/zq_avator"/>
+        <LinearLayout
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="15dp"
+           >
+            <TextView
+                android:id="@+id/zq_name"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:text="123"
+                android:layout_centerVertical="true"
+                android:textColor="@color/itemText_black"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/zq_time"
+                android:layout_width="match_parent"
+                android:textSize="10sp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_vertical"
+                android:text="123"
+                android:textColor="@color/itemText_red"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/iv_getWay"
+                android:layout_marginRight="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

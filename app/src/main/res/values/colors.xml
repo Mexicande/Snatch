@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FA97C1</color>
+    <color name="colorPrimaryDark">#FCB5D5</color>
+    <color name="colorAccent">#FFFF4081</color>
+    <color name="itemText_black">#0D3015</color>
+    <color name="itemText_red">#ED5796</color>
+    <color name="blue">#45C0F0</color>
+    <color name="colorDivider">#cacaca</color>
+    <color name="bg_color">#F8F8F8</color>
+    <color name="colorMainBack">#f0eeee</color>
+    <color name="colorIndexBg">#b3e57f</color>
+    <color name="colorIndexFont">#442204</color>
+    <color name="colorDanmu">#88545454</color>
+    <color name="trans">#02494949</color>
+    <color name="center_black">#FFFFFF</color>
+    <color name="red_lion">#FAC0C2</color>
+    <color name="message_red">#F84242</color>
+    <color name="red_text">#F32E40</color>
+    <color name="shallow_red">#FDF2F3</color>
+    <color name="select_red">#fbd4d7</color>
+    <color name="color_shouhuo_text">#116727</color>
+    <color name="green_text">#F55261</color>
+    <color name="shape3">#F55261</color>
+    <color name="shape2">#F9765B</color>
+    <color name="text_color">#333333</color>
+    <color name="soild_color">#D6FED1</color>
+    <color name="green_lion">#9FDF97</color>
+    <color name="green_press">#9FDF97</color>
+    <color name="e_white">#EEEEEE</color>
+    <color name="black_666">#666666</color>
+    <color name="product_limit">#999999</color>
+    <color name="setting_button">#DDDDDD</color>
+    <color name="user_center_lion">#FAC0C2</color>
+    <color name="grey_b2b2b2">#B2B2B2</color>
+    <color name="blue_78d2f6">#78D2F6</color>
+    <color name="blue_01aaee">#01AAEE</color>
+    <color name="red_f3323b">#F3323B</color>
+    <color name="transparent">#00000000</color>
+
+
+    <!-- 白色 -->
+    <color name="white">#FFFFFF</color>
+    <color name="common_pressed">#20000000</color>  <!--白色背景按下去的颜色-->
+    <color name="line">#e8e8e8</color>
+
+</resources>
