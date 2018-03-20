@@ -37,8 +37,6 @@ public class MessageActivity extends BaseActivity {
     RecyclerView mRecyclerView;
     @Bind(R.id.tv_title)
     TextView tvTitle;
-    @Bind(R.id.iv_default)
-    ImageView ivDefault;
     private String mToken;
     private ArrayList<NoticeMessageBean.InfoBean> mListData = new ArrayList();
     private NoticeAdapter mAdapter = new NoticeAdapter(mListData);
@@ -100,7 +98,7 @@ public class MessageActivity extends BaseActivity {
 
             @Override
             public void requestFailure(int code, String msg) {
-                toast(msg);
+                //toast(msg);
                 if(mListData.size()==0){
                     mAdapter.setEmptyView(notDataView);
                 }

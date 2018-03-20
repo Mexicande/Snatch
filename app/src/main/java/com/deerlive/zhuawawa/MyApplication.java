@@ -43,8 +43,6 @@ public class MyApplication extends Application {
 
         Utils.init(this);
 
-        initOkGo();
-
 
         StyledDialog.init(this);
         //ShareSDK
@@ -56,6 +54,7 @@ public class MyApplication extends Application {
         //友盟
         MobclickAgent.startWithConfigure(new MobclickAgent.UMAnalyticsConfig(this,"5a2e357aa40fa3791100004f"
                 ,channel));
+        initOkGo();
         //极光推送
         //JPushInterface.setDebugMode(true);
       //  JPushInterface.init(this);

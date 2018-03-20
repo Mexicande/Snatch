@@ -289,7 +289,9 @@ public class Api {
                     public void onSuccess(Response<String> response) {
                         if(response.body()!=null){
                             JSONObject jsonObject = JSON.parseObject(response.body());
+
                             Integer code = jsonObject.getInteger("code");
+
                             if(code==200){
                                 listener.requestSuccess(0, jsonObject);
                             }else {

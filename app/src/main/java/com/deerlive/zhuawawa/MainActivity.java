@@ -93,16 +93,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                         String status = list.getString("status");
                         if("0".equals(status)){
 
-                            PopupBean popupBean = JSON.parseObject(list.toString(), PopupBean.class);
-                            AdialogFragment adialogFragment= AdialogFragment.newInstance(popupBean);
-                            adialogFragment.show(getSupportFragmentManager(),"adialogFragment");
-                            long timeMillis = System.currentTimeMillis();
-                            SPUtils.getInstance().put("AdvertTime", timeMillis);
-
-
-
-
-                            /*long advertTime = SPUtils.getInstance().getLong("AdvertTime",1111111111111L);
+                            long advertTime = SPUtils.getInstance().getLong("AdvertTime",1111111111111L);
                             boolean today = TimeUtils.isToday(advertTime);
                             if (!today) {
                                 PopupBean popupBean = JSON.parseObject(list.toString(), PopupBean.class);
@@ -110,7 +101,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                                 adialogFragment.show(getSupportFragmentManager(),"adialogFragment");
                                 long timeMillis = System.currentTimeMillis();
                                 SPUtils.getInstance().put("AdvertTime", timeMillis);
-                            }*/
+                            }
 
                         }
                     }
@@ -251,11 +242,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         mConvenientBanner.setDelegate(new BGABanner.Delegate<ImageView, DeviceAndBanner.BannerBean.PicBean>() {
             @Override
             public void onBannerItemClick(BGABanner banner, ImageView itemView, DeviceAndBanner.BannerBean.PicBean model, int position) {
-                if (!" ".equals(mBannerData.get(position).getJump())&&mBannerData.get(position).getJump()!=null) {
+                if (mBannerData.get(position).getUrl()!=null&&!mBannerData.get(position).getUrl().isEmpty()) {
                     DeviceAndBanner.BannerBean.PicBean b = mBannerData.get(position);
                     Bundle temp = new Bundle();
                     temp.putString("title", b.getTitle());
-                    temp.putString("jump", b.getJump());
+                    temp.putString("jump", b.getUrl());
                     ActivityUtils.startActivity(temp, WebviewActivity.class);
                 }
 

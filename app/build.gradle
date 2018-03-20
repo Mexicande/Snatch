@@ -1,11 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'bugly'
 apply plugin: 'walle'
 
-bugly {
-    appId = '8063782a38'
-    appKey = '56838b92-88eb-453a-aa74-06eabba3c8b8'
-}
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
@@ -14,8 +9,8 @@ android {
         applicationId "com.deerlive.zhuawawa"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 7
-        versionName "1.3.3"
+        versionCode 8
+        versionName "1.6.2"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {

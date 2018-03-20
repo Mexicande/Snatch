@@ -59,6 +59,7 @@ public class WebviewActivity extends BaseActivity implements PlatformActionListe
             String jump = data.getString("jump");
             tvTitle.setText(title);
             mWebView.loadUrl(jump);
+
         }
         mLoadingDialog = StyledDialog.buildLoading().setActivity(this).show();
         WebSettings webSettings = mWebView.getSettings();
@@ -127,7 +128,7 @@ public class WebviewActivity extends BaseActivity implements PlatformActionListe
         String mToken = SPUtils.getInstance().getString("token");
 
         Map<String,String>params=new HashMap<>();
-        params.put("state","success ");
+        params.put("state","success");
         params.put("token",mToken);
 
         Api.backShare(this, params, new OnRequestDataListener() {
@@ -165,6 +166,7 @@ public class WebviewActivity extends BaseActivity implements PlatformActionListe
         return flag;
     }
 
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && mWebView.canGoBack()) {
             mWebView.goBack();// 返回前一个页面

@@ -107,8 +107,17 @@ public class GrabBean implements Serializable{
         private String img;
         private String exchange_price;
         private String play_time;
+        private String prize_id;
         private int  change;
         private int num;
+
+        public String getPrize_id() {
+            return prize_id;
+        }
+
+        public void setPrize_id(String prize_id) {
+            this.prize_id = prize_id;
+        }
 
         public int getChange() {
             return change;

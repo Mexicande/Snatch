@@ -22,6 +22,7 @@ import com.deerlive.zhuawawa.common.WebviewActivity;
 import com.deerlive.zhuawawa.intf.OnRequestDataListener;
 import com.deerlive.zhuawawa.utils.ActivityUtils;
 import com.deerlive.zhuawawa.utils.AppUtils;
+import com.deerlive.zhuawawa.utils.LogUtils;
 import com.deerlive.zhuawawa.utils.SPUtils;
 import com.deerlive.zhuawawa.view.supertextview.SuperTextView;
 
@@ -129,6 +130,8 @@ public class SettingActivity extends BaseActivity {
     public void checkUpdate(View v) {
         Map<String,String> params=new HashMap<>();
            String versionCode= AppUtils.getAppVersionCode()+"";
+
+        LogUtils.i("versionCode==",versionCode);
             params.put("ver_num", versionCode);
 
         Api.checkUpdate(this, params, new OnRequestDataListener() {

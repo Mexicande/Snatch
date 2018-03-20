@@ -114,13 +114,15 @@ public class WeiQuListActivity extends BaseActivity implements OnRecyclerViewIte
 
                 if (mListData.size() != 0) {
                     ivDefault.setVisibility(View.GONE);
+                }else {
+                    ivDefault.setVisibility(View.VISIBLE);
+
                 }
                 mAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void requestFailure(int code, String msg) {
-                toast(msg);
                 if (mListData.size() == 0) {
                     ivDefault.setVisibility(View.VISIBLE);
 
