@@ -48,33 +48,56 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="5dp">
-            <LinearLayout
-                android:id="@+id/num"
-                android:layout_marginLeft="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="2dp"
-                android:background="@drawable/mess_bg">
-                <ImageView
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/num"
                     android:layout_marginLeft="5dp"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@mipmap/people_num"/>
-                <TextView
-                    android:layout_marginRight="5dp"
-                    android:layout_marginLeft="2dp"
-                    android:id="@+id/player_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:text=""/>
-            </LinearLayout>
-
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="2dp"
+                    android:background="@drawable/mess_bg">
+                    <ImageView
+                        android:layout_marginLeft="5dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@mipmap/people_num"/>
+                    <TextView
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="2dp"
+                        android:id="@+id/player_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:text=""/>
+                </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/layout_prize"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/iv_prize"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="80dp"
+                        android:layout_height="60dp"
+                        android:src="@mipmap/iv_prize_list"/>
+                    <ImageView
+                        android:id="@+id/iv_finger"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="55dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:src="@mipmap/iv_finger"/>
+                </RelativeLayout>
+            </RelativeLayout>
             <com.deerlive.zhuawawa.view.MarqueeTextView
                 android:id="@+id/marText"
-                android:visibility="gone"
                 android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

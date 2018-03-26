@@ -31,7 +31,7 @@ import java.util.Map;
 public class Api {
     public static final String APP_VER = AppUtils.getAppVersionName();
     //public static final String HOST = "http://kuailai.deerlive.com/";
-    public static final String HOST = "http://test.doll.anwenqianbao.com/";
+    public static final String HOST = "http://doll.anwenqianbao.com/";
     public static final String OS = "android";
     public static final String QUDAO = "kuailai-one";
 
@@ -57,12 +57,15 @@ public class Api {
 
     //查询在线人数/跑马灯
     public static final String GET_LAMP=HOST+"Api/SiSi/getLamp";
+    //升级更新
+    public static final String GET_UPDATE=HOST+"Api/SiSi/checkAndroid";
 
     //分享回调
     public static final String SHARE_BACK=HOST+"Api/SiSi/shareWX";
 
 
-    private static final String CHECK_UPDATE = HOST + "Api/SiSi/checkAndroidVer";
+    private static final String CHECK_UPDATE = HOST + "Api/SiSi/checkAndroidVer"
+            ;
     private static final String ENTER_PLAYER = HOST + "Api/SiSi/enterDeviceRoom";
     private static final String GET_LATEST_DEVICE_RECORD = HOST + "Api/SiSi/getWinLogByDeviceid";
     //收货地址
@@ -246,7 +249,6 @@ public class Api {
 
     private static void newExcuteMapPost(String storeIntegar, Context context, Map<String,String> params, final OnRequestDataListener listener) {
         final String netError = context.getString(R.string.net_error);
-
         OkGo.<String>post(storeIntegar)
                 .tag(context)
                 .params(params,false)
