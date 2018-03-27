@@ -22,6 +22,7 @@ import com.deerlive.zhuawawa.activity.UserCenterActivity;
 import com.deerlive.zhuawawa.adapter.GameRecyclerListAdapter;
 import com.deerlive.zhuawawa.base.BaseActivity;
 import com.deerlive.zhuawawa.common.Api;
+import com.deerlive.zhuawawa.common.Contacts;
 import com.deerlive.zhuawawa.common.WebviewActivity;
 import com.deerlive.zhuawawa.fragment.AdialogFragment;
 import com.deerlive.zhuawawa.intf.OnRecyclerViewItemClickListener;
@@ -69,15 +70,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         token = SPUtils.getInstance().getString("token");
-        updateDiy();
+        int versionCode = AppUpdateUtils.getVersionCode(this);
+        updateDiy(versionCode, this);
         initGameList();
         initBanner();
         mRefreshLayout.autoRefresh();
         initData();
-    }
-    public void updateDiy() {
-        int  versionCode = AppUpdateUtils.getVersionCode(this);
-        updateDiy(versionCode,this);
     }
     private void updateDiy(int versionCode, final Activity context) {
         Map<String, String> params = new HashMap<String, String>();
@@ -124,7 +122,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                             JSONObject jsonObject = info.getJSONObject("info");
 
                             Integer code = info.getInteger("code");
-                            if(code==509){
+                            if(code== Contacts.UPDATE_ERROR){
                                 showAdvertising();
                             }
                             int size = Integer.parseInt(jsonObject.getString("size"));

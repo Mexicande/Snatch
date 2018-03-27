@@ -101,6 +101,7 @@ public class GrabBean implements Serializable{
          * num : 1
          */
         private int remoteUid;
+        private String id ;
         private String gift_id;
         private String doll_id;
         private String name;
@@ -110,6 +111,41 @@ public class GrabBean implements Serializable{
         private String prize_id;
         private int  change;
         private int num;
+        private String remark;
+        private String price;
+        private String device_id;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getRemark() {
+            return remark;
+        }
+
+        public void setRemark(String remark) {
+            this.remark = remark;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
+        public String getDevice_id() {
+            return device_id;
+        }
+
+        public void setDevice_id(String device_id) {
+            this.device_id = device_id;
+        }
 
         public String getPrize_id() {
             return prize_id;

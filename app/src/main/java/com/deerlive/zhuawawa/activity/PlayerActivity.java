@@ -2,6 +2,7 @@ package com.deerlive.zhuawawa.activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.media.projection.MediaProjectionManager;
@@ -44,6 +45,7 @@ import com.deerlive.zhuawawa.adapter.MessageRecyclerListAdapter;
 import com.deerlive.zhuawawa.agora.MyEngineEventHandler;
 import com.deerlive.zhuawawa.base.BaseActivity;
 import com.deerlive.zhuawawa.common.Api;
+import com.deerlive.zhuawawa.common.Contacts;
 import com.deerlive.zhuawawa.common.GlideCircleTransform;
 import com.deerlive.zhuawawa.common.SoundUtils;
 import com.deerlive.zhuawawa.fragment.RecordFragment;
@@ -231,7 +233,7 @@ public class PlayerActivity extends BaseActivity implements View.OnTouchListener
         TranslateAnimation animation = new TranslateAnimation(0, -15, 0, 0);
         animation.setInterpolator(new OvershootInterpolator());
         animation.setDuration(250);
-        animation.setRepeatCount(1000);
+        animation.setRepeatCount(100000000);
         animation.setRepeatMode(Animation.REVERSE);
         ivFinger.startAnimation(animation);
 
@@ -257,6 +259,7 @@ public class PlayerActivity extends BaseActivity implements View.OnTouchListener
 
     }
 
+
     private void enterPlayer() {
         Map<String, String> p = new HashMap<>();
         p.put("token", mToken);
@@ -266,6 +269,8 @@ public class PlayerActivity extends BaseActivity implements View.OnTouchListener
             public void requestSuccess(int code, JSONObject data) {
                 JSONObject d = data.getJSONObject("data");
                 JSONArray dm = data.getJSONArray("msg");
+
+
                 mChannelStatus = d.getString("channel_status");
                 mmPlayPrice = d.getString("price");
                 mPlayPrice.setText("x" + mmPlayPrice);
@@ -314,6 +319,9 @@ public class PlayerActivity extends BaseActivity implements View.OnTouchListener
         getChannelKey();
     }
 
+    /**
+     * 获取设备key、用户金币数量
+     */
     private void getChannelKey() {
         Map<String, String> params = new HashMap<>();
         params.put("token", mToken);
@@ -321,7 +329,12 @@ public class PlayerActivity extends BaseActivity implements View.OnTouchListener
         Api.getChannelKey(this, params, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
-                mChannelKey = data.getString("info");
+                JSONObject info = data.getJSONObject("info");
+                mChannelKey=  info.getString("key");
+                String balance = data.getString("balance");
+                if(balance!=null){
+                    mPlayBalance.setText(balance);
+                }
                 initAgora();
 
             }
@@ -1308,6 +1321,8 @@ public class PlayerActivity extends BaseActivity implements View.OnTouchListener
     @OnClick(R.id.layout_prize)
     public void onViewClicked() {
         //奖品列表
-
+            Intent intent=new Intent(this,PrizeListActivity.class);
+            intent.putExtra(Contacts.DEVICE_ID,mRemoteUid);
+            ActivityUtils.startActivity(intent);
     }
 }

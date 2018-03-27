@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -152,6 +153,8 @@ public class WeiQuListActivity extends BaseActivity implements OnRecyclerViewIte
         int s = mListData.get(position).getRemoteUid();
         if (s == 1) {
             mListData.get(position).setRemoteUid(0);
+            ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+
             mAdapter.notifyItemChanged(position);
             duihuan.setBackgroundResource(R.drawable.prize_button);
             duihuan.setEnabled(true);
@@ -174,6 +177,8 @@ public class WeiQuListActivity extends BaseActivity implements OnRecyclerViewIte
                     if (mListData.get(i).getChange() == 1) {
                         if(mListData.get(i).getRemoteUid()==1){
                             mListData.get(i).setRemoteUid(0);
+                            ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+
                             mAdapter.notifyItemChanged(i);
                         }
                     }
@@ -187,6 +192,8 @@ public class WeiQuListActivity extends BaseActivity implements OnRecyclerViewIte
                     if (mListData.get(i).getChange() == 0) {
                         if(mListData.get(i).getRemoteUid()==1){
                             mListData.get(i).setRemoteUid(0);
+                            ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+
                             mAdapter.notifyItemChanged(i);
                         }
 

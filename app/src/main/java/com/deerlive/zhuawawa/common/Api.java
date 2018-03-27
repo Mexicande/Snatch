@@ -31,7 +31,7 @@ import java.util.Map;
 public class Api {
     public static final String APP_VER = AppUtils.getAppVersionName();
     //public static final String HOST = "http://kuailai.deerlive.com/";
-    public static final String HOST = "http://doll.anwenqianbao.com/";
+    public static final String HOST = "http://test.doll.anwenqianbao.com/";
     public static final String OS = "android";
     public static final String QUDAO = "kuailai-one";
 
@@ -41,7 +41,7 @@ public class Api {
     public static final String ANNUNCIATE = HOST + "Api/SiSi/notice";
     private static final String GET_BANNER = HOST + "Api/SiSi/getBanner";
     private static final String GET_GAME = HOST + "Api/SiSi/getLiveBanner";
-    private static final String GET_CHANNEL_KEY = HOST + "Api/SiSi/getChannelKey";
+    private static final String GET_CHANNEL_KEY = HOST + "Api/SiSi/getChannelKeys";
     //帮助
     public static final String URL_GAME_HELP = HOST + "/portal/appweb/help?qudao="+QUDAO;
     //邀请
@@ -57,6 +57,8 @@ public class Api {
 
     //查询在线人数/跑马灯
     public static final String GET_LAMP=HOST+"Api/SiSi/getLamp";
+    //查询在线人数/跑马灯
+    public static final String GET_DOLLLIST=HOST+"Api/SiSi/dollList";
     //升级更新
     public static final String GET_UPDATE=HOST+"Api/SiSi/checkAndroid";
 
@@ -108,6 +110,9 @@ public class Api {
     public static void getPayType(final Context context, Map<String, String> params, final OnRequestDataListener listener) {
         //SFProgrssDialog dialog = SFProgrssDialog.show(context,"请稍后...");
         newExcuteMapPost(GET_PAY_TYPE, context, params,listener);
+    }
+    public static void getDollList(final Context context, Map<String, String> params, final OnRequestDataListener listener) {
+        newExcuteMapPost(GET_DOLLLIST, context, params,listener);
     }
     public static void applyPostOrDuiHuanWaWa(final Context context, JSONObject params, final OnRequestDataListener listener) {
         newExcuteJsonPost(APPLY_POST_DUIHUAN_WAWA, context, params,listener);
