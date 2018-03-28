@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
-import android.widget.CheckBox;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,7 +25,6 @@ import com.deerlive.zhuawawa.utils.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,10 +43,14 @@ public class PrizeListActivity extends BaseActivity {
     RecyclerView recyclerview;
     @Bind(R.id.refreshLayout)
     SmartRefreshLayout mRefreshLayout;
+    @Bind(R.id.bt_capture)
+    Button btCapture;
     private String mToken;
     private ReplaceAdapter mReplaceAdapter;
-    private ArrayList<GrabBean.InfoBean> mArrays=new ArrayList<>();
-    private int mPositon=0;
+    private ArrayList<GrabBean.InfoBean> mArrays = new ArrayList<>();
+    private int mPositon = 0;
+    private int mBt=0;
+    private int mDevice_id=0;
     public void goBack(View v) {
         finish();
     }
@@ -78,18 +81,18 @@ public class PrizeListActivity extends BaseActivity {
         mReplaceAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                mPositon=position;
+                mPositon = position;
                 GrabBean.InfoBean item = mReplaceAdapter.getItem(position);
-                if(item.getRemoteUid()==0){
+                if (item.getRemoteUid() == 0) {
                     item.setRemoteUid(1);
-                    mArrays.set(position,item);
-                    ((SimpleItemAnimator)recyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
+                    mArrays.set(position, item);
+                    ((SimpleItemAnimator) recyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
                     mReplaceAdapter.notifyItemChanged(position);
-                    for(int i=0;i<mArrays.size();i++){
-                        if(i!=position&&mArrays.get(i).getRemoteUid()==1){
+                    for (int i = 0; i < mArrays.size(); i++) {
+                        if (i != position && mArrays.get(i).getRemoteUid() == 1) {
                             mArrays.get(i).setRemoteUid(0);
-                            mArrays.set(i,mArrays.get(i));
-                            ((SimpleItemAnimator)recyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
+                            mArrays.set(i, mArrays.get(i));
+                            ((SimpleItemAnimator) recyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
                             mReplaceAdapter.notifyItemChanged(i);
                         }
                     }
@@ -102,17 +105,23 @@ public class PrizeListActivity extends BaseActivity {
 
     private void initView() {
 
-        mReplaceAdapter=new ReplaceAdapter(null);
+        mReplaceAdapter = new ReplaceAdapter(null);
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setAdapter(mReplaceAdapter);
 
     }
 
     private void getDate(final int limit_begin) {
-        int intExtra = getIntent().getIntExtra(Contacts.DEVICE_ID, 0);
+        mDevice_id = getIntent().getIntExtra(Contacts.DEVICE_ID, 0);
+        mBt = getIntent().getIntExtra("bt", 10);
+        if (mBt != 10) {
+            if (mBt == 1) {
+                btCapture.setText("提取");
+            }
+        }
         Map<String, String> params = new HashMap<>();
         params.put("token", mToken);
-        params.put("device_id", intExtra+"");
+        params.put("device_id", mDevice_id + "");
         params.put("limit_begin", String.valueOf(limit_begin));
         params.put("limit_num", 10 + "");
 
@@ -125,7 +134,7 @@ public class PrizeListActivity extends BaseActivity {
                 if (mRefreshLayout.isLoading()) {
                     mRefreshLayout.finishLoadmore();
                 }
-                if(data!=null){
+                if (data != null) {
                     GrabBean grabBean = JSON.parseObject(data.toString(), GrabBean.class);
                     mArrays.addAll(grabBean.getInfo());
                     mReplaceAdapter.setNewData(mArrays);
@@ -148,13 +157,38 @@ public class PrizeListActivity extends BaseActivity {
 
     @OnClick(R.id.bt_capture)
     public void onViewClicked() {
-        if(mPositon!=0){
-            Intent intent=new Intent();
-            intent.putExtra("id",mReplaceAdapter.getItem(mPositon).getId());
-            setResult(Contacts.RESULT_CODE,intent);
-            finish();
-        }else {
+        if (mPositon != 0) {
+            if(mBt==1){
+                doReplaceDoll();
+            }else {
+                Intent intent = new Intent();
+                intent.putExtra("id", mReplaceAdapter.getItem(mPositon).getId());
+                setResult(Contacts.RESULT_CODE, intent);
+                finish();
+            }
+        } else {
             ToastUtils.showShort("您还没选择娃娃");
         }
+    }
+
+    private void doReplaceDoll() {
+        Map<String, String> params = new HashMap<>();
+        params.put("token", mToken);
+        params.put("device_id", mDevice_id + "");
+        params.put("doll_id", mArrays.get(mPositon).getId());
+        Api.getReplacedoll(this, params, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                String descrp = data.getString("descrp");
+                ToastUtils.showShort(descrp);
+                finish();
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                ToastUtils.showShort(msg);
+            }
+        });
+
     }
 }

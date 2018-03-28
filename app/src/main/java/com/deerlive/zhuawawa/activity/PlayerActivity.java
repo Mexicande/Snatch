@@ -2,6 +2,7 @@ package com.deerlive.zhuawawa.activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
@@ -59,6 +60,7 @@ import com.deerlive.zhuawawa.utils.ActivityUtils;
 import com.deerlive.zhuawawa.utils.KeyboardUtils;
 import com.deerlive.zhuawawa.utils.SPUtils;
 import com.deerlive.zhuawawa.utils.SharedPreferencesUtil;
+import com.deerlive.zhuawawa.utils.ToastUtils;
 import com.deerlive.zhuawawa.view.MarqueeTextView;
 import com.tencent.rtmp.ITXLivePlayListener;
 import com.tencent.rtmp.TXLivePlayer;
@@ -85,6 +87,8 @@ public class PlayerActivity extends BaseActivity implements View.OnTouchListener
     MarqueeTextView marText;
     @Bind(R.id.iv_finger)
     ImageView ivFinger;
+    @Bind(R.id.layout_prize)
+    RelativeLayout layoutPrize;
     private String mTag = "PlayerActivity";
     private String mIsOnline = "0";
     private RtcEngine mRtcEngine;
@@ -176,6 +180,8 @@ public class PlayerActivity extends BaseActivity implements View.OnTouchListener
     private MediaProjectionManager mMediaProjectionManager;
     private int mNum = 0;
     private LampBean lampBean = new LampBean();
+    private String mRelpace="";
+    private int type=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -330,9 +336,22 @@ public class PlayerActivity extends BaseActivity implements View.OnTouchListener
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 JSONObject info = data.getJSONObject("info");
-                mChannelKey=  info.getString("key");
-                String balance = data.getString("balance");
-                if(balance!=null){
+                mChannelKey = info.getString("key");
+                String balance = info.getString("balance");
+                int status = info.getInteger("status");
+                if (status == 0) {
+                    layoutPrize.setVisibility(View.GONE);
+                } else {
+                    layoutPrize.setVisibility(View.VISIBLE);
+                    TranslateAnimation animation = new TranslateAnimation(0, -15, 0, 0);
+                    animation.setInterpolator(new OvershootInterpolator());
+                    animation.setDuration(250);
+                    animation.setRepeatCount(1000);
+                    animation.setRepeatMode(Animation.REVERSE);
+                    ivFinger.startAnimation(animation);
+
+                }
+                if (balance != null) {
                     mPlayBalance.setText(balance);
                 }
                 initAgora();
@@ -1000,11 +1019,42 @@ public class PlayerActivity extends BaseActivity implements View.OnTouchListener
             } else {
                 ds.show();
             }
+            ds.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+
+                    if(type==0){
+
+                        doReplaceDoll();
+
+                    }
+
+                }
+            });
             if (soundPool != null) {
                 soundPool.play(soundID.get("success"), 1, 1, 0, 0, 1);
             }
             //closeRecord();
         }
+    }
+
+    private void doReplaceDoll() {
+        Map<String, String> params = new HashMap<>();
+        params.put("token", mToken);
+        params.put("device_id", String.valueOf(mRemoteUid));
+        params.put("doll_id", mRelpace);
+        Api.getReplacedoll(this, params, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+                String descrp = data.getString("descrp");
+                ToastUtils.showShort(descrp);
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                ToastUtils.showShort(msg);
+            }
+        });
     }
 
     private void meiZhuazhu(JSONObject j) {
@@ -1138,12 +1188,23 @@ public class PlayerActivity extends BaseActivity implements View.OnTouchListener
         mCameraChange.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * 提取
+     * @param v
+     */
     public void resultYesGo(View v) {
+        type=1;
+        Intent intent = new Intent(this, PrizeListActivity.class);
+        intent.putExtra(Contacts.DEVICE_ID, mRemoteUid);
+        intent.putExtra("bt",1);
+        startActivityForResult(intent,Contacts.QUESTION_CODE1);
         //mZhuaZhuContainer.setVisibility(View.GONE);
         if (ds != null) {
             ds.dismiss();
         }
-        ActivityUtils.startActivity(WeiQuListActivity.class);
+
+
+       //ActivityUtils.startActivity(WeiQuListActivity.class);
     }
 
     @Override
@@ -1321,8 +1382,19 @@ public class PlayerActivity extends BaseActivity implements View.OnTouchListener
     @OnClick(R.id.layout_prize)
     public void onViewClicked() {
         //奖品列表
-            Intent intent=new Intent(this,PrizeListActivity.class);
-            intent.putExtra(Contacts.DEVICE_ID,mRemoteUid);
-            ActivityUtils.startActivity(intent);
+        Intent intent = new Intent(this, PrizeListActivity.class);
+        intent.putExtra(Contacts.DEVICE_ID, mRemoteUid);
+        intent.putExtra("bt",0);
+        startActivityForResult(intent,Contacts.QUESTION_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==Contacts.QUESTION_CODE){
+           if(resultCode==Contacts.RESULT_CODE){
+               mRelpace= data.getStringExtra("id");
+           }
+        }
     }
 }
