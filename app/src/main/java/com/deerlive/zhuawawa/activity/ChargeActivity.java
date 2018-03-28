@@ -81,9 +81,6 @@ public class ChargeActivity extends BaseActivity {
     private SlideUp cat_SlideUp;
 
 
-    public static void launch(Context context) {
-        context.startActivity(new Intent(context, ChargeActivity.class));
-    }
 
 
     @Override

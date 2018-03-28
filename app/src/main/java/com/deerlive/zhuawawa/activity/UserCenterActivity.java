@@ -51,7 +51,7 @@ public class UserCenterActivity extends BaseActivity {
     }
 
     public void goCharge(View v) {
-        ChargeActivity.launch(this);
+        ActivityUtils.startActivity(ChargeActivity.class);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class UserCenterActivity extends BaseActivity {
         layoutIntegal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RecordStoreActivity.launch(UserCenterActivity.this);
+                ActivityUtils.startActivity(ChargeActivity.class);
 
             }
         });

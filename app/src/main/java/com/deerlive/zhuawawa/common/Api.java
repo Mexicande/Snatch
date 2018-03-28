@@ -57,8 +57,12 @@ public class Api {
 
     //查询在线人数/跑马灯
     public static final String GET_LAMP=HOST+"Api/SiSi/getLamp";
-    //查询在线人数/跑马灯
+    //娃娃代抓列表
     public static final String GET_DOLLLIST=HOST+"Api/SiSi/dollList";
+    //游戏列表
+    public static final String GET_GAMELSIT=HOST+"Api/SiSi/gameList";
+    //代抓提取
+    public static final String GET_REPLACEDOLL=HOST+"Api/SiSi/replaceDoll";
     //升级更新
     public static final String GET_UPDATE=HOST+"Api/SiSi/checkAndroid";
 
@@ -113,6 +117,10 @@ public class Api {
     }
     public static void getDollList(final Context context, Map<String, String> params, final OnRequestDataListener listener) {
         newExcuteMapPost(GET_DOLLLIST, context, params,listener);
+    }
+
+    public static void getReplacedoll(final Context context, Map<String, String> params, final OnRequestDataListener listener) {
+        newExcuteMapPost(GET_REPLACEDOLL, context, params,listener);
     }
     public static void applyPostOrDuiHuanWaWa(final Context context, JSONObject params, final OnRequestDataListener listener) {
         newExcuteJsonPost(APPLY_POST_DUIHUAN_WAWA, context, params,listener);
@@ -212,8 +220,8 @@ public class Api {
         newExcuteMapPost(GET_CHANNEL_KEY, context, params,listener);
     }
 
-    public static void getBanner(final Context context, Map<String, String>   params, final OnRequestDataListener listener) {
-        newExcuteMapPost(GET_BANNER, context, params,listener);
+    public static void setGetGame(final Context context, Map<String, String>   params, final OnRequestDataListener listener) {
+        newExcuteMapPost(GET_GAMELSIT, context, params,listener);
     }
 
     //device banner

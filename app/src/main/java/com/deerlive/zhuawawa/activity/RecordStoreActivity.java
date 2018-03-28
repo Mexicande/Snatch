@@ -58,9 +58,7 @@ public class RecordStoreActivity extends BaseActivity  {
     public void goBack(View v) {
         finish();
     }
-    public static void launch(Context context) {
-        context.startActivity(new Intent(context, RecordStoreActivity.class));
-    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

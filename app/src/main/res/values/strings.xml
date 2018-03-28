@@ -10,6 +10,7 @@
     <string name="data_error">数据异常</string>
     <string name="bt_capture">开抓</string>
     <string name="title_prize">奖品详情</string>
+    <string name="title_game">游戏中心列表</string>
 
     <string name="consignee">收货人</string>
     <string name="hint_consignee">请输入收货人姓名</string>

@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.deerlive.zhuawawa.activity.ChargeActivity;
+import com.deerlive.zhuawawa.activity.GameListActivity;
 import com.deerlive.zhuawawa.activity.PlayerActivity;
 import com.deerlive.zhuawawa.activity.RecordStoreActivity;
 import com.deerlive.zhuawawa.activity.SettingActivity;
@@ -28,6 +29,7 @@ import com.deerlive.zhuawawa.fragment.AdialogFragment;
 import com.deerlive.zhuawawa.intf.OnRecyclerViewItemClickListener;
 import com.deerlive.zhuawawa.intf.OnRequestDataListener;
 import com.deerlive.zhuawawa.model.DeviceAndBanner;
+import com.deerlive.zhuawawa.model.GameListBean;
 import com.deerlive.zhuawawa.model.PopupBean;
 import com.deerlive.zhuawawa.utils.ActivityUtils;
 import com.deerlive.zhuawawa.utils.SPUtils;
@@ -386,16 +388,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case  R.id.layout_invite:
-                Bundle temp = new Bundle();
+               /* Bundle temp = new Bundle();
                 temp.putString("title", getResources().getString(R.string.yaoqing_me));
                 temp.putString("jump", Api.URL_GAME_YAOQING + "&token=" +token );
-                ActivityUtils.startActivity(temp, WebviewActivity.class);
+                ActivityUtils.startActivity(temp, WebviewActivity.class);*/
+               ActivityUtils.startActivity(GameListActivity.class);
                 break;
             case  R.id.layout_integral:
-                RecordStoreActivity.launch(this);
+                ActivityUtils.startActivity(RecordStoreActivity.class);
                 break;
             case  R.id.layout_charge:
-                ChargeActivity.launch(this);
+                ActivityUtils.startActivity(ChargeActivity.class);
+
                 break;
             default:
                 break;
