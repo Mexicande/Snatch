@@ -256,7 +256,8 @@
         <activity android:name=".activity.GameListActivity" />
         <activity android:name=".activity.PrizeListActivity" />
         <activity android:name=".activity.game.AttentionActivity" />
-        <activity android:name=".activity.game.AddSpeedActivity"></activity>
+        <activity android:name=".activity.game.AddSpeedActivity" />
+        <activity android:name=".activity.game.AttentionChildActivity"></activity>
     </application>
 
 </manifest>
