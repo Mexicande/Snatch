@@ -100,6 +100,7 @@ public class AttentionChildActivity extends BaseActivity {
         mArrays.addAll(setlist);
         mAttention_NumberAdapter.getData().clear();
         mAttention_NumberAdapter.setNewData(mArrays);
+        mAttention_NumberAdapter.notifyDataSetChanged();
     }
 
 

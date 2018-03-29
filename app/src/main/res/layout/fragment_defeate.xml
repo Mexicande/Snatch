@@ -4,14 +4,51 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.deerlive.zhuawawa.fragment.DefeateFragment">
-
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
-        android:layout_centerInParent="true"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="390dp"
         android:background="@mipmap/iv_defeate"
         >
-
+        <ImageView
+            android:id="@+id/iv_again"
+            android:layout_marginBottom="70dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/iv_defeate_again"/>
+        <LinearLayout
+            android:layout_marginBottom="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/iv_satar"/>
+            <TextView
+                android:id="@+id/tv_spend"
+                android:textSize="9dp"
+                android:layout_marginLeft="1dp"
+                android:textColor="#E77C1B"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="200金币/次"/>
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/bt_share"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/iv_defeate_share"/>
     </RelativeLayout>
+
 </RelativeLayout>

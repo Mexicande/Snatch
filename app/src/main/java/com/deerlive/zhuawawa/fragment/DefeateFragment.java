@@ -25,8 +25,6 @@ import butterknife.ButterKnife;
 public class DefeateFragment extends DialogFragment {
 
 
-    @Bind(R.id.bt)
-    SuperButton bt;
 
 
     public DefeateFragment() {
@@ -45,7 +43,7 @@ public class DefeateFragment extends DialogFragment {
             WindowManager.LayoutParams wlp = window.getAttributes();
             wlp.gravity = Gravity.CENTER;
             wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
-            wlp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            wlp.height = WindowManager.LayoutParams.MATCH_PARENT;
             window.setAttributes(wlp);
             setCancelable(false);
         }
