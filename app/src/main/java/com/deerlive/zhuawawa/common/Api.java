@@ -57,6 +57,12 @@ public class Api {
 
     //查询在线人数/跑马灯
     public static final String GET_LAMP=HOST+"Api/SiSi/getLamp";
+    //游戏时间
+    public static final String GET_GAMETIME=HOST+"Api/SiSi/spendTime";
+    //开始游戏
+    public static final String GET_STARTGAME=HOST+"Api/SiSi/startGames";
+    //小程序免费次数和金额
+    public static final String GET_FREE=HOST+"Api/SiSi/gameFree";
     //娃娃代抓列表
     public static final String GET_DOLLLIST=HOST+"Api/SiSi/dollList";
     //游戏列表
@@ -95,6 +101,8 @@ public class Api {
     private static final String GET_USER_INFO = HOST + "Api/SiSi/getTokenInfo";
     //充值
     private static final String GET_PAY_METHOD = HOST + "Api/SiSi/get_recharge";
+    //充值
+    private static final String GET_RANKLSIT = HOST + "Api/SiSi/recordLog";
     //积分商城  积分
     private static final String STORE_INTEGAR=HOST+"Api/SiSi/convertList";
     private static final String BEGIN_PAY = HOST + "Api/Pay/begin_pay";
@@ -130,6 +138,21 @@ public class Api {
         newExcuteMapPost(GET_DIALOG, mainActivity, stringStringHashMap,onRequestDataListener);
 
     }
+    //小游戏免费次数和金额
+    public static void getGameFree(final Context context, Map<String, String> stringStringHashMap, OnRequestDataListener onRequestDataListener) {
+        newExcuteMapPost(GET_FREE, context, stringStringHashMap,onRequestDataListener);
+
+    }
+    //游戏时间
+    public static void getGameTime(final Context context, Map<String, String> stringStringHashMap, OnRequestDataListener onRequestDataListener) {
+        newExcuteMapPost(GET_GAMETIME, context, stringStringHashMap,onRequestDataListener);
+
+    }
+    //GET_STARTGAME
+    public static void setStartGame(final Context context, Map<String, String> stringStringHashMap, OnRequestDataListener onRequestDataListener) {
+        newExcuteMapPost(GET_STARTGAME, context, stringStringHashMap,onRequestDataListener);
+
+    }
     public static void getNoTakenWawa(final Context context, Map<String, String> params, final OnRequestDataListener listener) {
         newExcuteMapPost(GET_NOTAKEN_WAWA, context, params,listener);
     }
@@ -154,6 +177,10 @@ public class Api {
     //消息通知
     public static void getMessage(final Context context, Map<String,String> params, final OnRequestDataListener listener) {
         newExcuteMapPost(GET_MESSAGE, context, params,listener);
+    }
+    //加减大师排行榜
+    public static void getRanklsit(final Context context, Map<String,String> params, final OnRequestDataListener listener) {
+        newExcuteMapPost(GET_RANKLSIT, context, params,listener);
     }
 
 

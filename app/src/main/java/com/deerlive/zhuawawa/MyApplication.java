@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
+import com.deerlive.zhuawawa.utils.ThreadPoolProxy;
 import com.deerlive.zhuawawa.utils.Utils;
 import com.hss01248.dialog.StyledDialog;
 import com.lzy.okgo.OkGo;
@@ -13,10 +14,17 @@ import com.mob.MobSDK;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import static com.deerlive.zhuawawa.common.Api.APP_VER;
 import static com.deerlive.zhuawawa.common.Api.OS;
 import static com.deerlive.zhuawawa.common.Api.OS_VER;
 import static com.deerlive.zhuawawa.common.Api.QUDAO;
+import static java.util.concurrent.Executors.*;
 
 
 /**
@@ -32,11 +40,14 @@ public class MyApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this) ;
+
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+
         instance = this;
 
         // LeakCanary.install(this);
@@ -76,4 +87,9 @@ public class MyApplication extends Application {
     public static MyApplication getInstance(){
         return instance;
     }
+    public static ThreadPoolProxy getThreadPool(){
+
+        return new ThreadPoolProxy(4, 4, 3000);
+    }
+
 }

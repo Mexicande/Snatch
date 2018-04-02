@@ -45,8 +45,18 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         >
+        <TextView
+            android:id="@+id/tv_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="免 费"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white"/>
         <LinearLayout
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="15dp"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"

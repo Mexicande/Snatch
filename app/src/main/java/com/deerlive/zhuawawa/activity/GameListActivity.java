@@ -40,7 +40,8 @@ public class GameListActivity extends BaseActivity {
     @Bind(R.id.refreshLayout)
     SmartRefreshLayout mRefreshLayout;
     private GameAdapter mGameAdapter;
-    public void goBack(){
+
+    public void goBack(View v) {
         finish();
     }
 

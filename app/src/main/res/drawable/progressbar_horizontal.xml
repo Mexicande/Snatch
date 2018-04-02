@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background" >
+                 <shape>
+                     <!-- 圆角弧度 20 -->
+                     <padding android:top="5dp"
+                         android:bottom="5dp"
+                         android:right="5dp"
+                         android:left="5dp"/>
+                     <corners android:radius="15dp"/>
+                     <solid android:color="#401e9a" />
+                     <stroke android:color="#663dc1"
+                         android:width="5dp"/>
+                 </shape>
+             </item>
+<!--    <item android:id="@android:id/secondaryProgress">
+        <clip>
+            &lt;!&ndash; 为了防止bitmap被拉伸，所以没有直接用android:drawable属性&ndash;&gt;
+            <bitmap
+                android:scaleWidth="100%"
+                android:src="@drawable/iv_progress"
+                />
+
+        </clip>
+    </item>-->
+    <item
+        android:id="@android:id/progress">
+
+        <clip>
+            <!-- 为了防止bitmap被拉伸，所以没有直接用android:drawable属性-->
+            <bitmap
+                android:scaleWidth="100%"
+                android:src="@drawable/iv_progress"
+                 />
+
+    </clip>
+    </item>
+</layer-list>

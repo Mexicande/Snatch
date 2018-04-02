@@ -43,7 +43,7 @@ public class WebviewActivity extends BaseActivity implements PlatformActionListe
     Platform mPlatFormMoment;
     @Bind(R.id.tv_title)
     TextView tvTitle;
-
+    private String type;
     @SuppressLint("AddJavascriptInterface")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,7 @@ public class WebviewActivity extends BaseActivity implements PlatformActionListe
         if (data != null) {
             String title = data.getString("title");
             String jump = data.getString("jump");
+            type=data.getString("type");
             tvTitle.setText(title);
             mWebView.loadUrl(jump);
 
@@ -130,7 +131,7 @@ public class WebviewActivity extends BaseActivity implements PlatformActionListe
         Map<String,String>params=new HashMap<>();
         params.put("state","success");
         params.put("token",mToken);
-
+        params.put("type",type);
         Api.backShare(this, params, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {

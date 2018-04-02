@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.deerlive.zhuawawa.R;
+import com.deerlive.zhuawawa.common.Contacts;
 import com.deerlive.zhuawawa.common.WebviewActivity;
 import com.deerlive.zhuawawa.model.PopupBean;
 import com.deerlive.zhuawawa.utils.ActivityUtils;
@@ -97,6 +98,7 @@ public class AdialogFragment extends DialogFragment {
             case R.id.fl_content_container:
                 if (popupBean.getUrl()!=null) {
                     Bundle temp = new Bundle();
+                    temp.putString("type", Contacts.DRAW_TYPE);
                     temp.putString("title", popupBean.getName());
                     temp.putString("jump", popupBean.getUrl());
                     ActivityUtils.startActivity(temp, WebviewActivity.class);

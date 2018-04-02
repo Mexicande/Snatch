@@ -20,6 +20,7 @@ public class Attention_NumberAdapter extends BaseQuickAdapter<Integer,BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder helper, Integer item) {
-        helper.setText(R.id.tv_number,String.valueOf(item));
+        helper.setText(R.id.tv_number,String.valueOf(item))
+                .setBackgroundColor(R.id.tv_number,mContext.getResources().getColor(R.color.yellow_item));
     }
 }

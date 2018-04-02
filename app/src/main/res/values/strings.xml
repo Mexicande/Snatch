@@ -12,6 +12,9 @@
     <string name="title_prize">奖品详情</string>
     <string name="title_game">游戏中心列表</string>
     <string name="title_attention">注意力大挑战</string>
+    <string name="title_addspend">挑战算法能力</string>
+    <string name="tv_start_fress">免 费</string>
+    <string name="tv_start">开始游戏</string>
 
     <string name="consignee">收货人</string>
     <string name="hint_consignee">请输入收货人姓名</string>
@@ -24,6 +27,7 @@
     <string name="setting_default">设置为默认</string>
 
     <string name="data_empty_error">请先选择数据</string>
+    <string name="add_challenge">连续答对30道题即挑战成功</string>
     <string name="record_error">暂无该视频</string>
     <string name="about_us">关于我们</string>
     <string name="game_help">游戏帮助</string>

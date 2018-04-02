@@ -78,16 +78,17 @@
 
         <!-- 取消标题栏，如果在代码中settitle的话会无效 -->
         <item name="android:windowNoTitle">true</item>
-
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsTranslucent">true</item>
         <!-- 标题的和Message的文字颜色 -->
         <!--<item name="android:textColorPrimary">@color/black</item>-->
 
         <!-- 修改顶部标题背景颜色，具体颜色自己定，可以是图片 -->
         <!--<item name="android:topDark">@color/app_main_color_deep</item>-->
-
         <!--<item name="android:background">@color/white</item>-->
         <item name="android:windowBackground">@android:color/transparent</item>
-
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
         <!-- 在某些系统上面设置背景颜色之后出现奇怪的背景，处这里设置背景为透明，为了隐藏边框 -->
         <!--<item name="android:windowBackground">@android:color/transparent</item>-->
         <!--<item name="android:windowFrame">@null</item>-->
@@ -99,4 +100,12 @@
         <!-- <item name="colorAccent">@color/app_main_color</item>-->
     </style>
 
+
+
+    <style name="ProgressBarStyle">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:indeterminateDrawable">@mipmap/iv_progress</item>
+        <item name="android:minHeight">20dip</item>
+        <item name="android:maxHeight">20dip</item>
+    </style>
 </resources>
