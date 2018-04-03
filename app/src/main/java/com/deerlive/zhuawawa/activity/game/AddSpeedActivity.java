@@ -66,9 +66,7 @@ public class AddSpeedActivity extends BaseActivity {
                 } else {
                     btStart.setText(R.string.tv_start_fress);
                 }
-                String count = info.getString("count");
                 mBlance = info.getInteger("balance");
-                // tvCount.setText("当前共有" + count + "参赛");
                 tvSpend.setText(mBlance + "金币/次");
 
             }
@@ -89,7 +87,7 @@ public class AddSpeedActivity extends BaseActivity {
                 break;
             case R.id.bt_share:
                 Bundle temp = new Bundle();
-                temp.putString("type", Contacts.ATTENTION_TYPE);
+                temp.putString("type", Contacts.ADD_TYPE);
                 temp.putString("title", getResources().getString(R.string.yaoqing_me));
                 temp.putString("jump", Api.URL_GAME_YAOQING + "&token=" + mToken);
                 Intent intent = new Intent(this, WebviewActivity.class);
@@ -97,9 +95,8 @@ public class AddSpeedActivity extends BaseActivity {
                 startActivityForResult(intent, Contacts.QUESTION_CODE);
                 break;
             case R.id.bt_start:
-                ActivityUtils.startActivity(AddChildActivity.class);
-
-                //startGame();
+                //ActivityUtils.startActivity(AddChildActivity.class);
+                startGame();
                 break;
             case R.id.bt_ranking:
                 RankFragment rankFragment=new RankFragment();

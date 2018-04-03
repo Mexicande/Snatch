@@ -72,6 +72,8 @@ public class Api {
     //升级更新
     public static final String GET_UPDATE=HOST+"Api/SiSi/checkAndroid";
 
+    //游戏时间
+    public static final String GET_GAMERECORD=HOST+"Api/SiSi/startRecord";
     //分享回调
     public static final String SHARE_BACK=HOST+"Api/SiSi/shareWX";
 
@@ -136,7 +138,10 @@ public class Api {
     //广告弹窗
     public static void getDialog(MainActivity mainActivity, Map<String, String> stringStringHashMap, OnRequestDataListener onRequestDataListener) {
         newExcuteMapPost(GET_DIALOG, mainActivity, stringStringHashMap,onRequestDataListener);
-
+    }
+    //游戏时间
+    public static void getGameRecord(final Context context, Map<String, String> stringStringHashMap, OnRequestDataListener onRequestDataListener) {
+        newExcuteMapPost(GET_GAMERECORD, context, stringStringHashMap,onRequestDataListener);
     }
     //小游戏免费次数和金额
     public static void getGameFree(final Context context, Map<String, String> stringStringHashMap, OnRequestDataListener onRequestDataListener) {

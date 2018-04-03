@@ -21,6 +21,9 @@ android {
                 includeCompileClasspath = true
             }
         }
+        aaptOptions{
+            cruncherEnabled = false
+        }
     }
     signingConfigs {
         debug {

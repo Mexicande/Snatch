@@ -28,6 +28,7 @@ import com.deerlive.zhuawawa.utils.ToastUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,8 +100,15 @@ public class RankFragment extends DialogFragment {
                 getDate(mRecordZjDate.size());
             }
         });
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                getDate(0);
+            }
+        });
     }
-    private void getDate(int page) {
+
+    private void getDate(final int page) {
         Map<String, String> params = new HashMap<>();
         params.put("token", mToken);
         params.put("type", Contacts.ADD_TYPE);
@@ -109,7 +118,13 @@ public class RankFragment extends DialogFragment {
             @Override
             public void requestSuccess(int code, JSONObject data) {
                 JSONArray info = data.getJSONArray("info");
-                mRecordZjDate.clear();
+                if(page==0){
+                    mRecordZjDate.clear();
+                }
+
+                if (refreshLayout.isRefreshing()) {
+                    refreshLayout.finishRefresh();
+                }
                 if (refreshLayout.isLoading()) {
                     refreshLayout.finishLoadmore();
                 }
@@ -128,6 +143,9 @@ public class RankFragment extends DialogFragment {
             @Override
             public void requestFailure(int code, String msg) {
                 ToastUtils.showShort(msg);
+                if (refreshLayout.isRefreshing()) {
+                    refreshLayout.finishRefresh();
+                }
                 if (refreshLayout.isLoading()) {
                     refreshLayout.finishLoadmore();
                 }
@@ -139,5 +157,10 @@ public class RankFragment extends DialogFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @OnClick(R.id.iv_off)
+    public void onViewClicked() {
+        dismiss();
     }
 }

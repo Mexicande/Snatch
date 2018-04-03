@@ -1,6 +1,7 @@
 package com.deerlive.zhuawawa.activity.game;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,9 +21,12 @@ import com.deerlive.zhuawawa.adapter.Attention_NumberAdapter;
 import com.deerlive.zhuawawa.base.BaseActivity;
 import com.deerlive.zhuawawa.common.Api;
 import com.deerlive.zhuawawa.common.Contacts;
+import com.deerlive.zhuawawa.fragment.ClearedFragment;
 import com.deerlive.zhuawawa.fragment.DefeateFragment;
+import com.deerlive.zhuawawa.intf.DialogListener;
 import com.deerlive.zhuawawa.intf.OnRequestDataListener;
 import com.deerlive.zhuawawa.utils.Attention_ItemDecoration;
+import com.deerlive.zhuawawa.utils.SPUtils;
 import com.deerlive.zhuawawa.utils.SizeUtils;
 
 import java.util.ArrayList;
@@ -37,7 +41,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import cn.iwgang.countdownview.CountdownView;
 
-public class AttentionChildActivity extends BaseActivity implements DefeateFragment.DefeateInputListener , DialogInterface.OnDismissListener {
+public class AttentionChildActivity extends BaseActivity implements DialogListener, DialogInterface.OnDismissListener {
 
     @Bind(R.id.bt_back)
     ImageView btBack;
@@ -55,13 +59,17 @@ public class AttentionChildActivity extends BaseActivity implements DefeateFragm
     private int mBlance;
     private int mTime;
     private Random mRandom=new Random();
+    private String mToken;
+    private int mPass;
+    private int endTime=0;
+    private int passEnd=2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBlance = getIntent().getIntExtra("blance", 0);
-
-        getTime();
+        mToken = SPUtils.getInstance().getString("token");
         initView();
+        getTime();
         startCountDownTime();
         setListener();
     }
@@ -74,11 +82,11 @@ public class AttentionChildActivity extends BaseActivity implements DefeateFragm
          * 即使退出activity，倒计时还能进行，因为是创建了后台的线程。
          * 有onTick，onFinsh、cancel和start方法
          */
-        CountDownTimer timer = new CountDownTimer(3 * 1000, 1000) {
+        CountDownTimer timer = new CountDownTimer(4 * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //每隔countDownInterval秒会回调一次onTick()方法
-                tvCountdown.setText((int) (millisUntilFinished/1000)+1+"");
+                tvCountdown.setText((int) (millisUntilFinished/1000)+"");
             }
 
             @Override
@@ -94,31 +102,52 @@ public class AttentionChildActivity extends BaseActivity implements DefeateFragm
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         tvCountdown.setVisibility(View.GONE);
+
                         mAttention_NumberAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                                 int item = mAttention_NumberAdapter.getItem(position);
-
                                 TextView viewByPosition = (TextView) mAttention_NumberAdapter.getViewByPosition(layoutRecycler, position, R.id.tv_number);
                                 viewByPosition.setBackgroundColor(getResources().getColor(R.color.blue_item));
                                 ((SimpleItemAnimator) layoutRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
-
-                                if (item - index == 1) {
-                                    if (item == mRandomIndex * 16) {
-                                        mRandomIndex++;
-                                        setRandom(mRandomIndex);
+                                if(position==mPass){
+                                    int minute = count.getMinute();
+                                    int second = count.getSecond();
+                                    if(minute!=0&&second!=0){
+                                        endTime=minute*60+second;
+                                    }else if(minute==0&&second!=0){
+                                        endTime=second;
+                                    }else if(minute!=0){
+                                        endTime=minute*60;
                                     }
-                                } else {
-                                    DefeateFragment defeateFragment = DefeateFragment.newInstance(mBlance);
-                                    defeateFragment.show(getSupportFragmentManager(), "defeateFragment");
+                                    passEnd=1;
+                                    ClearedFragment clearedFragment=ClearedFragment.newInstance(mBlance);
+                                    clearedFragment.show(getSupportFragmentManager(), "clearedFragment");
+                                }else {
+
+                                    if (item - index == 1) {
+                                        if (item == mRandomIndex * 16) {
+                                            mRandomIndex++;
+                                            setRandom(mRandomIndex);
+                                        }
+                                    } else {
+                                        int minute = count.getMinute();
+                                        int second = count.getSecond();
+                                        if(minute!=0&&second!=0){
+                                            endTime=minute*60+second;
+                                        }else if(minute==0&&second!=0){
+                                            endTime=second;
+                                        }else if(minute!=0){
+                                            endTime=minute*60;
+                                        }
+                                        DefeateFragment defeateFragment = DefeateFragment.newInstance(mBlance);
+                                        defeateFragment.show(getSupportFragmentManager(), "defeateFragment");
+                                    }
+                                    index = item;
                                 }
-                               /* TextView viewByPosition = (TextView) mAttention_NumberAdapter.getViewByPosition(layoutRecycler, position, R.id.tv_number);
-                                viewByPosition.setBackgroundColor(getResources().getColor(R.color.blue_item));
-                                ((SimpleItemAnimator) layoutRecycler.getItemAnimator()).setSupportsChangeAnimations(false);*/
-                                //mAttention_NumberAdapter.notifyItemChanged(position);
-                                index = item;
                             }
                         });
+
                     }
 
                     @Override
@@ -135,6 +164,16 @@ public class AttentionChildActivity extends BaseActivity implements DefeateFragm
         count.setOnCountdownEndListener(new CountdownView.OnCountdownEndListener() {
             @Override
             public void onEnd(CountdownView cv) {
+                int minute = count.getMinute();
+                int second = count.getSecond();
+                if(minute!=0&&second!=0){
+                    endTime=minute*60+second;
+                }else if(minute==0&&second!=0){
+                    endTime=second;
+                }else if(minute!=0){
+                    endTime=minute*60;
+                }
+                endTime=count.getMinute();
                 DefeateFragment defeateFragment = DefeateFragment.newInstance(mBlance);
                 defeateFragment.show(getSupportFragmentManager(), "defeateFragment");
             }
@@ -153,6 +192,7 @@ public class AttentionChildActivity extends BaseActivity implements DefeateFragm
             public void requestSuccess(int code, JSONObject data) {
                 JSONObject info = data.getJSONObject("info");
                 mTime = info.getInteger("times");
+                mPass = info.getInteger("pass");
                 setCountTime();
             }
 
@@ -166,6 +206,8 @@ public class AttentionChildActivity extends BaseActivity implements DefeateFragm
 
     private void setCountTime() {
         count.start(mTime * 1000);
+       /* count.updateShow(mTime * 1000);
+        count.stop();*/
     }
 
 
@@ -181,28 +223,26 @@ public class AttentionChildActivity extends BaseActivity implements DefeateFragm
         layoutRecycler.setAdapter(mAttention_NumberAdapter);
         mAttention_NumberAdapter.addData(mArrays);
 
-
-
     }
 
     private void reInit() {
+        passEnd=2;
+        setCountTime();
         mArrays.clear();
         for (int i = 1; i <= 16; i++) {
             mArrays.add(i);
         }
         mAttention_NumberAdapter.setNewData(mArrays);
-        setCountTime();
         index=0;
         mRandomIndex=1;
     }
 
     private void setRandom(int index) {
-       // setlist = new HashSet<>();
-       // setlist.clear();
         if(!mArrays.isEmpty()){
             mArrays.clear();
         }
         for (; ; ) {
+
             int nu = mRandom.nextInt(index * 16-(index-1)*16) + (index-1) * 16+1 ;
             mArrays.add(nu);
             for (int i = 0; i < mArrays.size() - 1; i++) {
@@ -212,9 +252,17 @@ public class AttentionChildActivity extends BaseActivity implements DefeateFragm
                     }
                 }
             }
-            if (mArrays.size() == 16) {
+
+            int i = mPass / index;
+            if(index==i){
+                if (mArrays.size() ==mPass % index) {
+                    break;
+                }
+            }
+            if(mArrays.size()==16){
                 break;
             }
+
         }
         mAttention_NumberAdapter.setNewData(mArrays);
     }
@@ -234,13 +282,65 @@ public class AttentionChildActivity extends BaseActivity implements DefeateFragm
 
     @Override
     public void onDismiss(DialogInterface dialog) {
-        reInit();
+        startGame();
     }
-
 
     @Override
     public void onDefeateComplete() {
+        setResult(Contacts.RESULT_CODE);
         finish();
+    }
+
+
+    /**
+     * 开始游戏
+     */
+    private void startGame() {
+        Map<String, String> params = new HashMap<>();
+        params.put("token", mToken);
+        params.put("type", Contacts.ATTENTION_TYPE);
+        Api.setStartGame(this, params, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+
+                reInit();
+
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+                toast(msg);
+            }
+        });
+
+    }
+    @Override
+    public void onBackPressed() {
+        sendRecord();
+        finish();
+    }
+
+    /**
+     * 游戏记录
+     */
+    private void sendRecord() {
+        Map<String, String> params = new HashMap<>();
+        params.put("token", mToken);
+        params.put("type", Contacts.ADD_TYPE);
+        params.put("times", endTime+"");
+        params.put("pass", index+"");
+        params.put("status", passEnd+"");
+        Api.getGameRecord(this, params, new OnRequestDataListener() {
+            @Override
+            public void requestSuccess(int code, JSONObject data) {
+
+            }
+
+            @Override
+            public void requestFailure(int code, String msg) {
+
+            }
+        });
 
     }
 }

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.deerlive.zhuawawa.R;
 import com.deerlive.zhuawawa.common.Api;
 import com.deerlive.zhuawawa.common.Contacts;
 import com.deerlive.zhuawawa.common.WebviewActivity;
+import com.deerlive.zhuawawa.intf.DialogListener;
 import com.deerlive.zhuawawa.utils.ActivityUtils;
 import com.deerlive.zhuawawa.utils.SPUtils;
 
@@ -37,11 +39,7 @@ public class DefeateFragment extends DialogFragment {
     @Bind(R.id.tv_spend)
     TextView tvSpend;
     private String mToken;
-    private  DefeateInputListener listener;
-    public interface DefeateInputListener
-    {
-        void onDefeateComplete();
-    }
+    private DialogListener callback;
 
     public static DefeateFragment newInstance(int nu) {
         DefeateFragment instance = new DefeateFragment();
@@ -75,7 +73,22 @@ public class DefeateFragment extends DialogFragment {
         mToken = SPUtils.getInstance().getString("token");
         int blance = getArguments().getInt("blance");
         tvSpend.setText(blance + "金币/次");
+        setListener();
         return view;
+    }
+
+    private void setListener() {
+        //监听返回键
+        getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
+                    callback.onDefeateComplete();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -85,20 +98,11 @@ public class DefeateFragment extends DialogFragment {
 
     }
 
-    @Override
-    public void onCancel(DialogInterface dialog) {
-        super.onCancel(dialog);
-        final Activity activity = getActivity();
-        if (activity instanceof DialogInterface.OnCancelListener) {
-            ((DialogInterface.OnCancelListener) activity).onCancel(dialog);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-         listener = (DefeateInputListener) getActivity();
-
+        callback= (DialogListener) context;
     }
 
     @Override
@@ -124,9 +128,7 @@ public class DefeateFragment extends DialogFragment {
                 dismiss();
                 break;
             case R.id.layout:
-                listener.onDefeateComplete();
-
-               // getDialog().cancel();
+                callback.onDefeateComplete();
                 break;
             case R.id.bt_share:
                 Bundle temp = new Bundle();
@@ -134,15 +136,12 @@ public class DefeateFragment extends DialogFragment {
                 temp.putString("title", getResources().getString(R.string.yaoqing_me));
                 temp.putString("jump", Api.URL_GAME_YAOQING + "&token=" + mToken);
                 ActivityUtils.startActivity(temp, WebviewActivity.class);
-               // getDialog().cancel();
-                listener.onDefeateComplete();
+                callback.onDefeateComplete();
 
                 break;
             case R.id.cancel1:
             case R.id.cancel2:
-                listener.onDefeateComplete();
-
-                //getDialog().cancel();
+                callback.onDefeateComplete();
                 break;
             default:
                 break;

@@ -1,13 +1,10 @@
 package com.deerlive.zhuawawa.fragment;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +18,7 @@ import com.deerlive.zhuawawa.R;
 import com.deerlive.zhuawawa.adapter.IntegarStoreAdapter;
 import com.deerlive.zhuawawa.common.Api;
 import com.deerlive.zhuawawa.intf.OnRequestDataListener;
-import com.deerlive.zhuawawa.intf.User_integration;
 import com.deerlive.zhuawawa.model.GiftStoreBean;
-import com.deerlive.zhuawawa.model.GrabBean;
 import com.deerlive.zhuawawa.model.eventbean.IntegarStore;
 import com.deerlive.zhuawawa.utils.SPUtils;
 import com.deerlive.zhuawawa.utils.SizeUtils;

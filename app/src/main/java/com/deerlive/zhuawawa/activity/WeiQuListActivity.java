@@ -1,7 +1,5 @@
 package com.deerlive.zhuawawa.activity;
 
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,8 +14,10 @@ import com.deerlive.zhuawawa.R;
 import com.deerlive.zhuawawa.adapter.WeiQuRecyclerListAdapter;
 import com.deerlive.zhuawawa.base.BaseActivity;
 import com.deerlive.zhuawawa.common.Api;
+import com.deerlive.zhuawawa.fragment.WeiQuDialogFragment;
 import com.deerlive.zhuawawa.intf.OnRecyclerViewItemClickListener;
 import com.deerlive.zhuawawa.intf.OnRequestDataListener;
+import com.deerlive.zhuawawa.intf.WeiQuInterface;
 import com.deerlive.zhuawawa.model.GrabBean;
 import com.deerlive.zhuawawa.utils.SPUtils;
 import com.deerlive.zhuawawa.view.dialog.CashDialog;
@@ -33,7 +33,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 
-public class WeiQuListActivity extends BaseActivity implements OnRecyclerViewItemClickListener {
+public class WeiQuListActivity extends BaseActivity implements OnRecyclerViewItemClickListener,WeiQuInterface{
 
     @Bind(R.id.refreshLayout)
     SmartRefreshLayout mRefreshLayout;
@@ -223,6 +223,7 @@ public class WeiQuListActivity extends BaseActivity implements OnRecyclerViewIte
                 @Override
                 public void onYesClick() {
                     cashDialog.dismiss();
+
                     tiquDuihuan("1", list);
                 }
             });
@@ -243,23 +244,27 @@ public class WeiQuListActivity extends BaseActivity implements OnRecyclerViewIte
      *
      * @param v
      */
+    private List<GrabBean.InfoBean> Grabbiest = new ArrayList<>();
     public void duihuan(View v) {
-
-        List<GrabBean.InfoBean> list = new ArrayList<>();
+        Grabbiest.clear();
+        int price=0;
         for (GrabBean.InfoBean mgrab : mListData) {
             if (mgrab.getRemoteUid() == 1) {
-                list.add(mgrab);
+                Grabbiest.add(mgrab);
+                price=price+Integer.parseInt(mgrab.getExchange_price());
             }
         }
-        if (!list.isEmpty()) {
-            tiquDuihuan("0", list);
+        if (!Grabbiest.isEmpty()) {
+            WeiQuDialogFragment weiQuDialogFragment=WeiQuDialogFragment.
+                    newInstance(String.valueOf(Grabbiest.size()),String.valueOf(price));
+            weiQuDialogFragment.show(getSupportFragmentManager(),"weiQuDialogFragment");
+
         } else if (mListData.size() != 0) {
             toast(getResources().getString(R.string.data_empty_error));
         }
     }
 
     private void tiquDuihuan(String type, List<GrabBean.InfoBean> list) {
-
 
         GrabBean grabBean = new GrabBean();
         grabBean.setInfo(list);
@@ -284,4 +289,13 @@ public class WeiQuListActivity extends BaseActivity implements OnRecyclerViewIte
     }
 
 
+    @Override
+    public void requestSure() {
+        tiquDuihuan("0", Grabbiest);
+    }
+
+    @Override
+    public void requestCancel() {
+
+    }
 }

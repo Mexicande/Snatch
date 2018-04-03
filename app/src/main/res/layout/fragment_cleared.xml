@@ -1,13 +1,65 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.deerlive.zhuawawa.fragment.ClearedFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="390dp"
+        android:id="@+id/layout"
+        android:background="@mipmap/iv_cleared"
+        >
+        <ImageView
+            android:id="@+id/iv_again"
+            android:layout_marginBottom="80dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/iv_cleared_again"/>
+        <LinearLayout
+            android:layout_marginBottom="65dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center_vertical"
+                android:src="@mipmap/iv_satar"/>
+            <TextView
+                android:id="@+id/tv_spend"
+                android:textSize="9dp"
+                android:layout_marginLeft="1dp"
+                android:textColor="#E77C1B"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="200金币/次"/>
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/bt_share"
+            android:layout_marginBottom="20dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/iv_cleared_share"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/cancel1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="50dp">
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/cancel2"
+        android:layout_below="@id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </RelativeLayout>
 
-</FrameLayout>
+</RelativeLayout>

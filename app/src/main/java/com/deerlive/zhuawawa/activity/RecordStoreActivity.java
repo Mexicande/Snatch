@@ -1,7 +1,6 @@
 package com.deerlive.zhuawawa.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,7 +15,6 @@ import com.deerlive.zhuawawa.adapter.MyViewPagerAdapter;
 import com.deerlive.zhuawawa.base.BaseActivity;
 import com.deerlive.zhuawawa.fragment.IntegarFragment;
 import com.deerlive.zhuawawa.fragment.StoreDuiHuanFragment;
-import com.deerlive.zhuawawa.intf.User_integration;
 import com.deerlive.zhuawawa.model.eventbean.IntegarStore;
 
 import net.lucode.hackware.magicindicator.FragmentContainerHelper;

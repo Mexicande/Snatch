@@ -6,8 +6,9 @@ import com.alibaba.fastjson.JSONObject;
  * Created by apple on 2018/1/27.
  */
 
-public interface User_integration {
+public interface WeiQuInterface {
 
-    void requestSuccess( String  integra);
+    void requestSure();
+    void requestCancel();
 
 }
