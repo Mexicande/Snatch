@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.deerlive.zhuawawa.R;
@@ -24,6 +25,8 @@ import com.deerlive.zhuawawa.common.WebviewActivity;
 import com.deerlive.zhuawawa.intf.DialogListener;
 import com.deerlive.zhuawawa.utils.ActivityUtils;
 import com.deerlive.zhuawawa.utils.SPUtils;
+
+import java.util.Calendar;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,6 +41,8 @@ public class DefeateFragment extends DialogFragment {
 
     @Bind(R.id.tv_spend)
     TextView tvSpend;
+    @Bind(R.id.iv_again)
+    ImageView ivAgain;
     private String mToken;
     private DialogListener callback;
 
@@ -77,16 +82,41 @@ public class DefeateFragment extends DialogFragment {
         return view;
     }
 
+    private static final int MIN_CLICK_DELAY_TIME = 7000;
+    // 设置1秒内只能点击一次
+
+    private long lastClickTime = 0;
+
+    private int id = -1;
     private void setListener() {
         //监听返回键
         getDialog().setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
                     callback.onDefeateComplete();
                     return true;
                 }
                 return false;
+            }
+        });
+        ivAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                long currentTime = Calendar.getInstance().getTimeInMillis();
+                int mId = v.getId();
+                if (id != mId) {
+                    id = mId;
+                    lastClickTime = currentTime;
+                    dismiss();
+                    return;
+                }
+                if (currentTime - lastClickTime > MIN_CLICK_DELAY_TIME) {
+                    lastClickTime = currentTime;
+                    dismiss();
+                }
+
+
             }
         });
     }
@@ -95,14 +125,13 @@ public class DefeateFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Base_AlertDialog);
-
     }
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        callback= (DialogListener) context;
+        callback = (DialogListener) context;
     }
 
     @Override
@@ -121,12 +150,9 @@ public class DefeateFragment extends DialogFragment {
         ButterKnife.unbind(this);
     }
 
-    @OnClick({R.id.iv_again, R.id.bt_share,R.id.layout,R.id.cancel1,R.id.cancel2})
+    @OnClick({ R.id.bt_share, R.id.layout, R.id.cancel1, R.id.cancel2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_again:
-                dismiss();
-                break;
             case R.id.layout:
                 callback.onDefeateComplete();
                 break;
@@ -137,7 +163,6 @@ public class DefeateFragment extends DialogFragment {
                 temp.putString("jump", Api.URL_GAME_YAOQING + "&token=" + mToken);
                 ActivityUtils.startActivity(temp, WebviewActivity.class);
                 callback.onDefeateComplete();
-
                 break;
             case R.id.cancel1:
             case R.id.cancel2:

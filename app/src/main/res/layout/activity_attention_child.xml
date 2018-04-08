@@ -39,7 +39,7 @@
         android:layout_marginLeft="20dp"
         android:textSize="14dp"
         android:textColor="@color/text_color"
-        android:text="集中注意力!1到300按顺序输入,完成领取娃娃!"
+        android:text="@string/attention_str"
         android:background="@drawable/attention_notice_bg"
         android:layout_height="wrap_content" />
     <RelativeLayout

@@ -1,5 +1,7 @@
 package com.deerlive.zhuawawa.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -84,12 +86,33 @@ public class UserCenterActivity extends BaseActivity {
 
         myBalanceText.setText(mmBalance);
         mUserName.setText(mmUserName);
-        Glide.with(this).load(mmAvator)
-                .error(R.mipmap.logo)
-                .transform(new GlideCircleTransform(this))
-                .into(mUserAvator);
+        final Context context = this;
+        if (isValidContextForGlide(context)) {
+            // Load image via Glide lib using context
+            Glide.with(this).load(mmAvator)
+                    .error(R.mipmap.logo)
+                    .transform(new GlideCircleTransform(this))
+                    .into(mUserAvator);
+        }
+
         mUserId.setText("ID:" + mId);
     }
+
+    public static boolean isValidContextForGlide(final Context context) {
+        if (context == null) {
+            return false;
+        }
+        if (context instanceof Activity) {
+            final Activity activity = (Activity) context;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                if (activity.isDestroyed() || activity.isFinishing()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     private void getUserInfo() {
         Map<String, String> p = new HashMap<>();

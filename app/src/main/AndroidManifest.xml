@@ -253,12 +253,24 @@
             android:name=".activity.AddAddressActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".activity.GameListActivity" />
-        <activity android:name=".activity.PrizeListActivity" />
-        <activity android:name=".activity.game.AttentionActivity" />
-        <activity android:name=".activity.game.AddSpeedActivity" />
-        <activity android:name=".activity.game.AttentionChildActivity" />
-        <activity android:name=".activity.game.AddChildActivity"></activity>
+        <activity android:name=".activity.GameListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".activity.PrizeListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".activity.game.AttentionActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".activity.game.AddSpeedActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".activity.game.AttentionChildActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity android:name=".activity.game.AddChildActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
     </application>
 
 </manifest>

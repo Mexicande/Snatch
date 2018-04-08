@@ -14,6 +14,7 @@ import com.deerlive.zhuawawa.activity.ShouhuoActivity;
 import com.deerlive.zhuawawa.intf.OnRequestDataListener;
 import com.deerlive.zhuawawa.utils.AppUtils;
 import com.deerlive.zhuawawa.utils.LogUtils;
+import com.deerlive.zhuawawa.utils.SPUtils;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
@@ -294,6 +295,8 @@ public class Api {
 
     private static void newExcuteMapPost(String storeIntegar, Context context, Map<String,String> params, final OnRequestDataListener listener) {
         final String netError = context.getString(R.string.net_error);
+        String mToken = SPUtils.getInstance().getString("token");
+        params.put("token",mToken);
         OkGo.<String>post(storeIntegar)
                 .tag(context)
                 .params(params,false)

@@ -25,6 +25,7 @@ import com.deerlive.zhuawawa.fragment.ClearedFragment;
 import com.deerlive.zhuawawa.fragment.DefeateFragment;
 import com.deerlive.zhuawawa.intf.DialogListener;
 import com.deerlive.zhuawawa.intf.OnRequestDataListener;
+import com.deerlive.zhuawawa.utils.LogUtils;
 import com.deerlive.zhuawawa.utils.SPUtils;
 import com.deerlive.zhuawawa.utils.ToastUtils;
 
@@ -64,6 +65,7 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
     private int mIndexPass=1;
     private int mResult;
     private int mProgress=0;
+    private int mMaxProgress=0;
 
     private Random mRandom= new Random();
     private int mBlance;
@@ -81,14 +83,14 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
         mToken = SPUtils.getInstance().getString("token");
 
         mBlance = getIntent().getIntExtra("blance", 0);
+        handler=new Handler();
         initView();
-        createAnimationThread();
         getTime();
+        createAnimationThread();
     }
 
     private void game() {
-        mIndexPass=2;
-        setCountTime();
+        tvOrder.setText("第"+(mIndexPass)+"道题");
         int nu1=0;
         int nu2=0;
         if(mIndexPass<=5){
@@ -143,6 +145,15 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_back:
+                isStopped=false;
+                handler.removeCallbacks(mRunnable);
+                int i = progressbar.getProgress() / 10;
+                int i1 = progressbar.getProgress() % 10;
+                if(i1>4){
+                    i=i+1;
+                }
+                errorTime=errorTime+(mIndexPass-1)+i ;
+                sendRecord();
                 setResult(Contacts.RESULT_CODE);
                 finish();
                 break;
@@ -161,20 +172,34 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
 
     private void getResult(boolean flag) {
         String s = result.getText().toString();
+        isStopped=false;
+        handler.removeCallbacks(mRunnable);
         if(String.valueOf(mResult).equals(s)==flag){
-            mIndexPass++;
-            if(mIndexPass>mPass){
-                customsIndex=2;
-                errorTime=progressbar.getProgress();
-                isStopped=false;
+            if(mIndexPass<mPass){
+                mIndexPass++;
+                game();
+                progressbar.setProgress(0);
+                handler.post(mRunnable);
+            }else {
+                customsIndex=1;
+                int i = progressbar.getProgress() / 10;
+                int i1 = progressbar.getProgress() % 10;
+                if(i1>4){
+                    i=i+1;
+                }
+                errorTime=errorTime+(mIndexPass-1)+i ;
+                sendRecord();
                 ClearedFragment clearedFragment=ClearedFragment.newInstance(mBlance);
                 clearedFragment.show(getSupportFragmentManager(), "clearedFragment");
-            }else {
-                game();
             }
         }else {
-            isStopped=false;
-            errorTime=progressbar.getProgress();
+            int i = progressbar.getProgress() / 10;
+            int i1 = progressbar.getProgress() % 10;
+            if(i1>4){
+                i=i+1;
+            }
+            errorTime=errorTime+(mIndexPass-1)+i ;
+            sendRecord();
             DefeateFragment defeateFragment = DefeateFragment.newInstance(mBlance);
             defeateFragment.show(getSupportFragmentManager(), "defeateFragment");
         }
@@ -214,6 +239,7 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
                     set.start();
                     break;
                 default:
+
                     break;
             }
 
@@ -227,6 +253,9 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
             @Override
             public void run() {
                 for (int i = 1; i <= 4; i++) {
+                    if(!isStopped){
+                        break;
+                    }
                     if (i < 4) {
                         //创建消息对象
                         Message message = myHandler.obtainMessage();
@@ -234,20 +263,20 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
                         //设置消息对象携带的数据
                         message.obj = i;
                         message.what = 1;
-
                         //将消息发送到主线程的消息处理器
                         myHandler.sendMessage(message);
                         //暂停500毫秒
                         SystemClock.sleep(500);
                     } else {
-                        SystemClock.sleep(500);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 layoutTime.setVisibility(View.GONE);
                                 layoutGame.setVisibility(View.VISIBLE);
-                                setCountTime();
                                 game();
+                                setCountTime();
+                                progressbar.setProgress(0);
+                                handler.postDelayed(mRunnable,500);
                             }
                         });
                     }
@@ -255,6 +284,7 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
 
             }
         };
+        MyApplication.getThreadPool().commitTask(mRunnableTime);
         //启动子线程
         MyApplication.getThreadPool().executeTask(mRunnableTime);
     }
@@ -272,6 +302,9 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
                 time = info.getInteger("times");
                 mPass = info.getInteger("pass");
                 tvText.setText("连续答对"+mPass+"道题即挑战成功");
+                tvTime.setText(time + "s");
+                progressbar.setMax(time*10);
+
             }
 
             @Override
@@ -285,35 +318,69 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
     /**
      * 倒计时
      */
+    int prolength=0;//定义进程度
+    Handler handler;
+
     private void setCountTime() {
-        tvTime.setText(time + "s");
-        progressbar.setMax(time);
         isStopped=true;
         mProgress=0;
-        progressbar.setProgress(mProgress);
+
         mRunnable = new Runnable() {
             @Override
             public void run() {
-                SystemClock.sleep(1000);
-                while (isStopped&&mProgress<=time){
-                    mProgress++;
-                    progressbar.setProgress(mProgress);
-                    SystemClock.sleep(1000);
+                prolength=progressbar.getProgress()+1;
+                progressbar.setProgress(prolength);
+                if(mIndexPass==1){
+                    if(prolength<time*10) {
+                        handler.postDelayed(mRunnable, 170);
+                    }
+                    else
+                    {
+                        handler.removeCallbacks(mRunnable);
+                        int i = progressbar.getProgress() / 10;
+                        int i1 = progressbar.getProgress() % 10;
+                        if(i1>4){
+                            i=i+1;
+                        }
+                        errorTime=errorTime+(mIndexPass-1)+i ;
+                        isStopped=false;
+                        sendRecord();
+                        DefeateFragment defeateFragment = DefeateFragment.newInstance(mBlance);
+                        defeateFragment.show(getSupportFragmentManager(), "defeateFragment");
+                    }
+                }else {
+                    if(prolength<time*10) {
+                        handler.postDelayed(mRunnable, 100);
+                    } else
+                    {
+                        handler.removeCallbacks(mRunnable);
+                        int i = progressbar.getProgress() / 10;
+                        int i1 = progressbar.getProgress() % 10;
+                        if(i1>4){
+                            i=i+1;
+                        }
+                        errorTime=errorTime+(mIndexPass-1)+i ;
+                        isStopped=false;
+                        sendRecord();
+                        DefeateFragment defeateFragment = DefeateFragment.newInstance(mBlance);
+                        defeateFragment.show(getSupportFragmentManager(), "defeateFragment");
+                    }
 
                 }
-                if(progressbar.getProgress()==time&&isStopped){
-                    errorTime=progressbar.getProgress();
-                    isStopped=false;
-                    DefeateFragment defeateFragment = DefeateFragment.newInstance(mBlance);
-                    defeateFragment.show(getSupportFragmentManager(), "defeateFragment");
-                }
+
+                //否则，都置零，线程重新执行
+
+                //如果进度小于100,则延迟1000毫秒之后重复执行runnable
+
             }
         };
-         MyApplication.getThreadPool().executeTask(mRunnable);
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
+        MyApplication.getThreadPool().removeTask(mRunnable);
+        //sendRecord();
+        isStopped=false;
         startGame();
     }
 
@@ -322,17 +389,18 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
         layoutTime.setVisibility(View.VISIBLE);
         mIndexPass=1;
         mResult=0;
-        isStopped=true;
+        isStopped=false;
         mProgress=0;
-        createAnimationThread();
+        errorTime=0;
         getTime();
+        progressbar.setProgress(0);
+        createAnimationThread();
     }
 
     @Override
     public void onDefeateComplete() {
         isStopped=false;
         setResult(Contacts.RESULT_CODE);
-        sendRecord();
         finish();
     }
 
@@ -347,14 +415,15 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
         Api.setStartGame(this, params, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
-
                 reInit();
-
             }
 
             @Override
             public void requestFailure(int code, String msg) {
                 toast(msg);
+                setResult(Contacts.RESULT_CODE);
+                sendRecord();
+                finish();
             }
         });
 
@@ -363,8 +432,8 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        handler.removeCallbacks(mRunnable);
         myHandler.removeMessages(1);
-        MyApplication.getThreadPool().removeTask(mRunnable);
         MyApplication.getThreadPool().removeTask(mRunnableTime);
     }
 
@@ -372,7 +441,9 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
     @Override
     public void onBackPressed() {
         isStopped=false;
+        errorTime=mProgress/10;
         sendRecord();
+        handler.removeCallbacks(mRunnable);
         myHandler.removeMessages(1);
         finish();
     }
@@ -390,7 +461,6 @@ public class AddChildActivity extends BaseActivity implements DialogListener, Di
         Api.getGameRecord(this, params, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
-
 
             }
 

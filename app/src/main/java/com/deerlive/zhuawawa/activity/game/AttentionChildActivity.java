@@ -28,6 +28,7 @@ import com.deerlive.zhuawawa.intf.OnRequestDataListener;
 import com.deerlive.zhuawawa.utils.Attention_ItemDecoration;
 import com.deerlive.zhuawawa.utils.SPUtils;
 import com.deerlive.zhuawawa.utils.SizeUtils;
+import com.deerlive.zhuawawa.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +54,6 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
     TextView tvCountdown;
     private Attention_NumberAdapter mAttention_NumberAdapter;
     private ArrayList<Integer> mArrays = new ArrayList<>();
-    private HashSet<Integer> setlist=new HashSet<>();
     private int index = 0;
     private int mRandomIndex = 1;
     private int mBlance;
@@ -61,6 +61,7 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
     private Random mRandom=new Random();
     private String mToken;
     private int mPass;
+    private int endIndex=1;
     private int endTime=0;
     private int passEnd=2;
     @Override
@@ -93,6 +94,7 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
             public void onFinish() {
                 ScaleAnimation scaleAnimation = (ScaleAnimation) AnimationUtils.loadAnimation(AttentionChildActivity.this, R.anim.zoom_down);
                 tvCountdown.startAnimation(scaleAnimation);
+
                 scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
@@ -102,7 +104,7 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         tvCountdown.setVisibility(View.GONE);
-
+                        setCountTime();
                         mAttention_NumberAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                             @Override
                             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
@@ -111,39 +113,28 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
                                 viewByPosition.setBackgroundColor(getResources().getColor(R.color.blue_item));
                                 ((SimpleItemAnimator) layoutRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
                                 if(position==mPass){
-                                    int minute = count.getMinute();
-                                    int second = count.getSecond();
-                                    if(minute!=0&&second!=0){
-                                        endTime=minute*60+second;
-                                    }else if(minute==0&&second!=0){
-                                        endTime=second;
-                                    }else if(minute!=0){
-                                        endTime=minute*60;
-                                    }
+
                                     passEnd=1;
+                                    endIndex=index+1;
+                                    count.stop();
+                                    sendRecord();
                                     ClearedFragment clearedFragment=ClearedFragment.newInstance(mBlance);
                                     clearedFragment.show(getSupportFragmentManager(), "clearedFragment");
                                 }else {
-
                                     if (item - index == 1) {
                                         if (item == mRandomIndex * 16) {
                                             mRandomIndex++;
                                             setRandom(mRandomIndex);
                                         }
+                                        index = item;
+                                        endIndex=index+1;
                                     } else {
-                                        int minute = count.getMinute();
-                                        int second = count.getSecond();
-                                        if(minute!=0&&second!=0){
-                                            endTime=minute*60+second;
-                                        }else if(minute==0&&second!=0){
-                                            endTime=second;
-                                        }else if(minute!=0){
-                                            endTime=minute*60;
-                                        }
+                                        endIndex=index+1;
+                                        count.stop();
+                                        sendRecord();
                                         DefeateFragment defeateFragment = DefeateFragment.newInstance(mBlance);
                                         defeateFragment.show(getSupportFragmentManager(), "defeateFragment");
                                     }
-                                    index = item;
                                 }
                             }
                         });
@@ -174,6 +165,7 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
                     endTime=minute*60;
                 }
                 endTime=count.getMinute();
+                sendRecord();
                 DefeateFragment defeateFragment = DefeateFragment.newInstance(mBlance);
                 defeateFragment.show(getSupportFragmentManager(), "defeateFragment");
             }
@@ -193,7 +185,6 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
                 JSONObject info = data.getJSONObject("info");
                 mTime = info.getInteger("times");
                 mPass = info.getInteger("pass");
-                setCountTime();
             }
 
             @Override
@@ -227,6 +218,7 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
 
     private void reInit() {
         passEnd=2;
+        endIndex=1;
         setCountTime();
         mArrays.clear();
         for (int i = 1; i <= 16; i++) {
@@ -242,7 +234,6 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
             mArrays.clear();
         }
         for (; ; ) {
-
             int nu = mRandom.nextInt(index * 16-(index-1)*16) + (index-1) * 16+1 ;
             mArrays.add(nu);
             for (int i = 0; i < mArrays.size() - 1; i++) {
@@ -252,7 +243,6 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
                     }
                 }
             }
-
             int i = mPass / index;
             if(index==i){
                 if (mArrays.size() ==mPass % index) {
@@ -276,6 +266,7 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
     @OnClick(R.id.bt_back)
     public void onViewClicked() {
         setResult(Contacts.RESULT_CODE);
+        sendRecord();
         finish();
     }
 
@@ -302,14 +293,14 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
         Api.setStartGame(this, params, new OnRequestDataListener() {
             @Override
             public void requestSuccess(int code, JSONObject data) {
-
                 reInit();
-
             }
 
             @Override
             public void requestFailure(int code, String msg) {
                 toast(msg);
+                sendRecord();
+                finish();
             }
         });
 
@@ -324,11 +315,20 @@ public class AttentionChildActivity extends BaseActivity implements DialogListen
      * 游戏记录
      */
     private void sendRecord() {
+        int minute = count.getMinute();
+        int second = count.getSecond();
+        if(minute!=0&&second!=0){
+            endTime=minute*60+second;
+        }else if(minute==0&&second!=0){
+            endTime=second;
+        }else if(minute!=0){
+            endTime=minute*60;
+        }
         Map<String, String> params = new HashMap<>();
         params.put("token", mToken);
-        params.put("type", Contacts.ADD_TYPE);
-        params.put("times", endTime+"");
-        params.put("pass", index+"");
+        params.put("type", Contacts.ATTENTION_TYPE);
+        params.put("times", (mTime-endTime)+"");
+        params.put("pass",(endIndex)+"");
         params.put("status", passEnd+"");
         Api.getGameRecord(this, params, new OnRequestDataListener() {
             @Override

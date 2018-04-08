@@ -78,7 +78,7 @@ public class MyApplication extends Application {
         params.put("soft_ver", APP_VER);
         params.put("os_ver", OS_VER);
         params.put("qudao",QUDAO);
-        params.put("channel","360");
+        params.put("channel",channel);
 
         OkGo.getInstance().init(this)
                 .addCommonParams(params);

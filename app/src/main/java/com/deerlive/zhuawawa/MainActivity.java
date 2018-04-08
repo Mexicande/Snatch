@@ -175,8 +175,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                      */
                     @Override
                     public void onBefore() {
-                        // CProgressDialogUtils.showProgressDialog(MainActivity.this);
-
+                       // CProgressDialogUtils.showProgressDialog(MainActivity.this);
                     }
                     /**
                      * 网路请求之后
@@ -388,10 +387,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case  R.id.layout_invite:
-               /* Bundle temp = new Bundle();
-                temp.putString("title", getResources().getString(R.string.yaoqing_me));
-                temp.putString("jump", Api.URL_GAME_YAOQING + "&token=" +token );
-                ActivityUtils.startActivity(temp, WebviewActivity.class);*/
                ActivityUtils.startActivity(GameListActivity.class);
                 break;
             case  R.id.layout_integral:
@@ -399,11 +394,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case  R.id.layout_charge:
                 ActivityUtils.startActivity(ChargeActivity.class);
-
                 break;
             default:
                 break;
-
         }
     }
     private long mLastBackTime = 0;
